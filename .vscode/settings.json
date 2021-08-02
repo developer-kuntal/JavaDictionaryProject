@@ -1,0 +1,17 @@
+{
+    "java.project.sourcePaths": [
+        "src",
+        "Properties"
+    ],
+    "java.project.outputPath": "bin",
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "d:\\Apache Maven\\jar_files\\mongo-java-driver-3.12.9.jar",
+        "d:\\Apache Maven\\apache-log4j-2.14.1-bin\\log4j-1.2-api-2.14.1.jar",
+        "d:\\Apache Maven\\apache-log4j-2.14.1-bin\\log4j-api-2.14.1.jar",
+        "d:\\Apache Maven\\apache-log4j-2.14.1-bin\\log4j-core-2.14.1.jar",
+        "d:\\Apache Maven\\JarDependenciesForJavaProject\\mongo-java-driver-3.12.9.jar",
+        "d:\\Apache Maven\\jsoup-1.14.1.jar",
+        "d:\\Apache Maven\\JarDependenciesForJavaProject\\jsoup-1.14.1.jar"
+    ]
+}
