@@ -12,6 +12,7 @@
         "d:\\Apache Maven\\apache-log4j-2.14.1-bin\\log4j-core-2.14.1.jar",
         "d:\\Apache Maven\\JarDependenciesForJavaProject\\mongo-java-driver-3.12.9.jar",
         "d:\\Apache Maven\\jsoup-1.14.1.jar",
-        "d:\\Apache Maven\\JarDependenciesForJavaProject\\jsoup-1.14.1.jar"
+        "d:\\Apache Maven\\jsoup-1.7.2.jar\\jsoup-1.7.2.jar",
+        "d:\\Apache Maven\\jsoup_2.8.1-0.9.1.jar\\jsoup_2.8.1-0.9.1.jar"
     ]
 }

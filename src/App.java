@@ -33,10 +33,12 @@ public class App {
         String completeUrl = null;
 
         while((line = br.readLine()) != null) {
-
+            // line = "acerbity";
             // System.out.println(line);
             try {
-                String queryString = line+"meaning+in+bengali";
+                // https://translate.google.co.in/?sl=en&tl=bn&text=agog&op=translate
+                
+                String queryString = line.toLowerCase()+" meaning in bengali google translate";
                 String encodedQuery = URLEncoder.encode(queryString, "UTF-8");
                 completeUrl = baseUrl + encodedQuery;
             } catch (UnsupportedEncodingException e) {
@@ -74,7 +76,7 @@ public class App {
 
     public static void main( String[] args ) {
         
-        File f = new File("D:\\JavaProject\\DictionaryProject\\data\\xab");
+        File f = new File("D:\\JavaProject\\DictionaryProject\\data\\xae");
         try {
             readLines(f);
         } catch (Exception e) {

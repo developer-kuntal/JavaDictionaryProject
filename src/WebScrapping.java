@@ -8,17 +8,25 @@ import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 
+// import java.io.File;
+// import java.io.BufferedWriter;
+// import java.io.FileWriter;
+
 public class WebScrapping {
 
     public String url;
     public ArrayList<String> listofWord = new ArrayList<>();
     public Document doc = null;
+    public Connection.Response html;
     public int i = 0;
     public boolean success = false;
+    public String setCssClass;
+    // public Connection conn = null;
+    // public Connection session = Jsoup.connect(url)
+    //                         .timeout(60 * 1000)
+    //                         .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36");
+    //                         .maxBodySize(0);
 
-    public Connection session = Jsoup.newSession()
-                            .timeout(60 * 1000)
-                            .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36");
 
     public WebScrapping(String url) {
         this.url = url;
@@ -34,18 +42,51 @@ public class WebScrapping {
                     // header("Content-Type", "text/html, application/xhtml+xml, application/xml;q=0.9, image/webp, */*;q=0.8").
                     // userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36").
                     // timeout(80000).followRedirects(true).get();
+                this.html = Jsoup.connect(url)
+                                .maxBodySize(0)
+                                .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36")
+                                // .timeout(60 * 1000)
+                                .execute();
 
-                doc = session.newRequest()
-                        .url(url)
-                        .get();
+                this.doc = this.html.parse();
+
+                // final File f = new File("filename.html");
+                // BufferedWriter bw = new BufferedWriter(new FileWriter(f));
+                // bw.write(doc.html());
+                // bw.close();
+
+                // Elements test = doc.getElementsByClass("hrcAhc");
+                // System.out.println(test);
+                // System.out.println("Page: "+html.body());
+                // System.out.println("Length: "+html.body().toString().length());
+                // Elements items = html.parse().getElementsByTag("span");
                 
-                if( doc.select(".hrcAhc").isEmpty() == true ) {
-                    System.out.println("Not Found"+i);
-                }
+                // System.out.println("ITEM: "+items);
+                // doc = conn.get();
+                // if( doc.select(".hrcAhc").isEmpty() == true ) {
+                //     System.out.println("Not Found"+i);
+                //     // break;
+                // }
 
-                if( doc.select(".hrcAhc").isEmpty() == false ) {  
-                    success = true;
-                    break;
+                if( this.doc != null ) {
+                    System.out.println("Entering...");
+                    if( this.doc.select(".hrcAhc").isEmpty() == false ) { 
+                        this.setCssClass = ".hrcAhc"; 
+                        this.success = true;
+                        break; 
+                    }
+                    if( this.doc.select(".Y2IQFc").isEmpty() == false ) {
+                        this.setCssClass = ".Y2IQFc"; 
+                        this.success = true;
+                        break;  
+                    }
+                    if( this.doc.select(".hgKElc").isEmpty() == false ) {
+                        this.setCssClass = ".hgKElc"; 
+                        this.success = true;
+                        break; 
+                    }
+                } else {
+                    System.out.println("Not Found"+i);
                 }
                 // get the page title
                 // String title = doc.title();
@@ -61,10 +102,10 @@ public class WebScrapping {
                 // return listofWord;
 
             } catch(SocketTimeoutException e) {
-                System.out.println("Timeout: URL"+url);
+                System.out.println("Timeout: URL"+this.url);
             }
             catch (IOException e) {
-                System.out.println("IOException"+url);
+                System.out.println("IOException"+this.url);
                 e.printStackTrace();
             }
             i++;
@@ -73,17 +114,17 @@ public class WebScrapping {
 
         if(success) {
             // Selector code ...
-            Elements bnList = doc.select(".hrcAhc");
+            Elements bnList = this.doc.select(this.setCssClass);
             for (Element list : bnList) {
                 // get the value from the href attribute
-                listofWord.add(list.text());
+                this.listofWord.add(list.text());
                 // System.out.println("List of Word: " + list.text());
             }
-            return listofWord;
+            return this.listofWord;
         } else {
-            listofWord.add("TimeOut/Not Found");
+            this.listofWord.add("TimeOut/Not Found");
             System.out.println("TimeOut");
-            return listofWord;
+            return this.listofWord;
         }
         
     }
