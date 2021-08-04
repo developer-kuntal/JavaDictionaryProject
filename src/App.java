@@ -21,7 +21,7 @@ public class App {
 
     public static String uri = "mongodb://localhost:27017";
     public static final MongoClient mongoClient = MongoClients.create(uri);
-    public static final MongoDatabase database = mongoClient.getDatabase("testdb");
+    public static final MongoDatabase database = mongoClient.getDatabase("dictionary_db");
     public static final MongoCollection<Document> collection = database.getCollection("words");
     public static final List<Document> documents = new ArrayList<Document>();
 
@@ -29,15 +29,17 @@ public class App {
         FileReader fr = new FileReader(f);
         BufferedReader br = new BufferedReader(fr);
         String line;
+        int lineCount = 1;
         String baseUrl = "https://www.google.com/search?q=";
         String completeUrl = null;
 
         while((line = br.readLine()) != null) {
+            System.out.println("Word: "+line.toUpperCase()+" Line Count: "+lineCount++);
             // line = "acerbity";
             // System.out.println(line);
             try {
-                // https://translate.google.co.in/?sl=en&tl=bn&text=agog&op=translate
-                
+                // https://translate.google.co.in/?sl=en&tl=bn&text=ABLAUT&op=translate
+                // completeUrl = "https://translate.google.co.in/?sl=en&tl=bn&text="+line.toLowerCase()+"&op=translate";
                 String queryString = line.toLowerCase()+" meaning in bengali google translate";
                 String encodedQuery = URLEncoder.encode(queryString, "UTF-8");
                 completeUrl = baseUrl + encodedQuery;
@@ -45,6 +47,7 @@ public class App {
                 //TODO: handle exception
                 System.out.println("Issue while decoding" +e.getMessage());
             }
+            // completeUrl = "https://translate.google.co.in/?sl=en&tl=bn&text="+line.toLowerCase()+"&op=translate";
 
             WebScrapping web = new WebScrapping(completeUrl);
 
@@ -55,7 +58,7 @@ public class App {
                 Document doc = new Document();
 
                 doc.put("word", line);
-                doc.put("bengali_meaning", bnList);
+                doc.put("bengali_meanings", bnList);
 
                 documents.add(doc);
                 // MongoOperation mOperation = new MongoOperation(line, bnList);
@@ -76,7 +79,7 @@ public class App {
 
     public static void main( String[] args ) {
         
-        File f = new File("D:\\JavaProject\\DictionaryProject\\data\\xae");
+        File f = new File("D:\\JavaProject\\DictionaryProject\\data\\xaa");
         try {
             readLines(f);
         } catch (Exception e) {
