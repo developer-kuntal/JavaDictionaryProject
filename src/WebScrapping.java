@@ -19,9 +19,9 @@ public class WebScrapping {
     public Document doc = null;
     public Connection.Response html;
     public int i = 1;
-    public boolean success = false;
+    // public boolean success = false;
     public String setCssClass;
-    public boolean wordMeaningsNotFound = true;
+    public boolean wordMeaningsFound = false;
 
     public WebScrapping(String url) {
         this.url = url;
@@ -29,6 +29,13 @@ public class WebScrapping {
 
     public ArrayList<String> WebScrappingData() throws IOException {
         while( i <= 3) {
+            
+            if( i > 1 ) {
+                this.listofWord.remove("TimeOut");
+                this.listofWord.remove("Error");
+                this.listofWord.remove("Not Found");
+            }
+
             try {
                 // System.out.println("Entering...."+i);
                 // fetch the document over HTTP
@@ -70,24 +77,31 @@ public class WebScrapping {
                     //     this.success = true;
                     //     break;
                     // }
-                    if( this.doc.select(".hrcAhc").isEmpty() == false ) { 
-                        this.setCssClass = ".hrcAhc"; 
-                        this.success = true;
-                        this.wordMeaningsNotFound = false;
-                        break; 
+                    if (!this.doc.select(".hrcAhc").isEmpty() || !this.doc.select(".Y2IQFc").isEmpty() || !this.doc.select(".hgKElc").isEmpty() ) {
+                        if( this.doc.select(".hrcAhc").isEmpty() == false ) { 
+                            this.setCssClass = ".hrcAhc"; 
+                            // this.success = true;
+                            this.wordMeaningsFound = true;
+                            break; 
+                        }
+                        if( this.doc.select(".Y2IQFc").isEmpty() == false ) {
+                            this.setCssClass = ".Y2IQFc"; 
+                            // this.success = true;
+                            this.wordMeaningsFound = true;
+                            break;  
+                        }
+                        if( this.doc.select(".hgKElc").isEmpty() == false ) {
+                            this.setCssClass = ".hgKElc"; 
+                            // this.success = true;
+                            this.wordMeaningsFound = true;
+                            break; 
+                        } 
+                    } else {
+                        this.listofWord.add("Not Found");
+                        this.wordMeaningsFound = false;
+                        break;
                     }
-                    if( this.doc.select(".Y2IQFc").isEmpty() == false ) {
-                        this.setCssClass = ".Y2IQFc"; 
-                        this.success = true;
-                        this.wordMeaningsNotFound = false;
-                        break;  
-                    }
-                    if( this.doc.select(".hgKElc").isEmpty() == false ) {
-                        this.setCssClass = ".hgKElc"; 
-                        this.success = true;
-                        this.wordMeaningsNotFound = false;
-                        break; 
-                    }
+
                 } else {
                     System.out.println("Not Found "+i);
                 }
@@ -105,20 +119,30 @@ public class WebScrapping {
                 // return listofWord;
 
             } catch(SocketTimeoutException e) {
-                System.out.println("Timeout: URL"+this.url);
+                System.out.println("Timeout: URL# "+this.url);
+                this.listofWord.add("TimeOut");
+                this.wordMeaningsFound = false;
+            } catch (IOException e) {
+                System.out.println("IOException "+e.getMessage());
+                this.listofWord.add("Error");
+                this.wordMeaningsFound = false;
             }
-            catch (IOException e) {
-                System.out.println("IOException"+e.getMessage());
-            }
-            if( this.wordMeaningsNotFound == true ) {
+
+            if( !this.wordMeaningsFound && listofWord.isEmpty() ) {
+                this.listofWord.add("Not Found");
                 System.out.println("Word Meaning Not Found in the Given Site<www.google.com> Page");
                 break;
+            } else if(!this.wordMeaningsFound && listofWord.isEmpty() && i == 3) {
+                System.out.println("The URL Hit maximum(3) attempts");
+                this.listofWord.add("Max Attempts");
+                break;
+            } else {
+                i++;
             }
-            i++;
             
         }
 
-        if(success) {
+        if(this.wordMeaningsFound) {
             // Selector code ...
             Elements bnList = this.doc.select(this.setCssClass);
             for (Element list : bnList) {
@@ -128,8 +152,7 @@ public class WebScrapping {
             }
             return this.listofWord;
         } else {
-            this.listofWord.add("TimeOut/Not Found");
-            System.out.println("TimeOut");
+            // this.listofWord.add("TimeOut/Not Found");
             return this.listofWord;
         }
         

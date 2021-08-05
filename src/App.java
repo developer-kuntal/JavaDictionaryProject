@@ -57,13 +57,22 @@ public class App {
                 // System.out.println("List of Word: "+bnList);
                 Document doc = new Document();
 
-                doc.put("word", line);
+                doc.put("word", line.toUpperCase());
                 doc.put("bengali_meanings", bnList);
 
                 documents.add(doc);
                 // MongoOperation mOperation = new MongoOperation(line, bnList);
                 // mOperation.saveDocument();
                 // collection.insertOne(doc);
+                
+                // Set Perticular Document Field to the UpperCase in MongoDB
+                // db.getCollection('words').find({}).forEach(function(doc) { 
+                //     db.getCollection('words').update(
+                //         { _id: doc._id},
+                //         { $set : { 'word' : doc.word.toUpperCase() } },
+                //         { multi: true }
+                //     )
+                //  })
 
                 System.out.println(doc.toJson());
             } catch (IOException e) {
@@ -79,9 +88,13 @@ public class App {
 
     public static void main( String[] args ) {
         
-        File f = new File("D:\\JavaProject\\DictionaryProject\\data\\xaa");
+        File f = new File("D:\\JavaProject\\DictionaryProject\\data\\xai");
         try {
+            long start = System.currentTimeMillis();
             readLines(f);
+            long end = System.currentTimeMillis();
+            float sec = (end - start) / 1000F; 
+            System.out.println(sec/60F + " minutes");
         } catch (Exception e) {
             //TODO: handle exception
             e.printStackTrace();
