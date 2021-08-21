@@ -21,7 +21,7 @@ public class App {
 
     public static String uri = "mongodb://localhost:27017";
     public static final MongoClient mongoClient = MongoClients.create(uri);
-    public static final MongoDatabase database = mongoClient.getDatabase("dictionary_db");
+    public static final MongoDatabase database = mongoClient.getDatabase("dictionary_db"); // testdb
     public static final MongoCollection<Document> collection = database.getCollection("words");
     public static final List<Document> documents = new ArrayList<Document>();
 
@@ -88,7 +88,7 @@ public class App {
 
     public static void main( String[] args ) {
         
-        File f = new File("D:\\JavaProject\\DictionaryProject\\data\\xai");
+        File f = new File("D:\\JavaProject\\DictionaryProject\\data\\xbq");
         try {
             long start = System.currentTimeMillis();
             readLines(f);
